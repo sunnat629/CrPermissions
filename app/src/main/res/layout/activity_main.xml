@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     tools:context="dev.sunnat629.crpermissions.MainActivity">
 
-    <TextView
+    <Button
+        android:id="@+id/ask_permission"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello World!"

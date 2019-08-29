@@ -3,26 +3,24 @@ package dev.sunnat629.crpermissions
 import android.annotation.TargetApi
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
+import android.content.pm.PackageManager.PERMISSION_DENIED
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.Uri.fromParts
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.NonNull
-import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 
+class CrPermissionFragment : Fragment() {
 
-class CrPermissionFragment: Fragment() {
-
-    private lateinit var permissionList: ArrayList<String>
-
+    private lateinit var permissionList: Array<String>
+    private lateinit var listener: PermissionListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,17 +32,23 @@ class CrPermissionFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     @TargetApi(Build.VERSION_CODES.M)
-    fun requestAllPermissions(@NonNull permissions: Array<String>){
+    fun requestAllPermissions(@NonNull permissions: Array<String>) {
         requestPermissions(permissions, PERMISSIONS_REQUEST_CODE)
     }
 
     @TargetApi(Build.VERSION_CODES.M)
-    fun requestSinglePermission(singlePermission: String){
+    fun requestSinglePermissionArray(permissionArray: Array<String>) {
+        setPermissionArray(permissionArray)
+        requestPermissions(permissionArray, PERMISSIONS_REQUEST_CODE)
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    fun requestSinglePermission(singlePermission: String) {
+        setPermissionArray(arrayOf(singlePermission))
         requestPermissions(arrayOf(singlePermission), PERMISSIONS_REQUEST_CODE)
     }
 
@@ -55,30 +59,17 @@ class CrPermissionFragment: Fragment() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        Log.e("ASDFG", "${permissions.contentToString()} ")
-        Log.i("ASDFG", "${grantResults.contentToString()}} ")
-    }
-
-
-
-    private fun requestSinglePermissionaaa(singlePermission: String) {
-        if (activity?.let {
-                checkSelfPermission(it, singlePermission)
-            } != PackageManager.PERMISSION_GRANTED) {
-            if (shouldShowRequestPermissionRationale(singlePermission)) {
-                requestPermissions(arrayOf(singlePermission), PERMISSIONS_REQUEST_CODE)
-//                val intent = Intent()
-//                intent.action = ACTION_APPLICATION_DETAILS_SETTINGS
-//                val uri = fromParts("package", activity?.packageName, null)
-//                intent.data = uri
-//                startActivity(intent)
-                Log.e("ASDFG", "$singlePermission go to Settings")
-            } else {
-                requestPermissions(arrayOf(singlePermission), PERMISSIONS_REQUEST_CODE)
-                Log.e("ASDFG", "$singlePermission is requestPermissions!")
-            }
-        } else {
-            Log.e("ASDFG", "$singlePermission is granted!")
+        permissions.mapIndexed { index, permission ->
+            when (grantResults[index]) {
+                    PERMISSION_GRANTED -> listener.onPermissionGranted(permission)
+                    PERMISSION_DENIED -> {
+                        if(shouldShowRequestPermissionRationale(permission)){
+                            listener.onPermissionRationaleShouldBeShown(permission)
+                        } else{
+                            listener.onPermissionDenied(permission)
+                        }
+                    }
+                }
         }
     }
 
@@ -96,12 +87,16 @@ class CrPermissionFragment: Fragment() {
             ?: throw IllegalStateException("This fragment must be attached to an activity.")
 
         return fragmentActivity.packageName?.let {
-            fragmentActivity.packageManager?.isPermissionRevokedByPolicy(permission,it)
+            fragmentActivity.packageManager?.isPermissionRevokedByPolicy(permission, it)
         }
     }
 
-    private fun setPermissionList(permissions: ArrayList<String>){
+    private fun setPermissionArray(permissions: Array<String>) {
         this.permissionList = permissions
+    }
+
+    private fun setPermissionStatusListener(listener: PermissionListener) {
+        this.listener = listener
     }
 
     fun requestPermissionInSetting() {
@@ -114,16 +109,26 @@ class CrPermissionFragment: Fragment() {
         activity?.apply {
             startActivityForResult(intent, PERMISSIONS_REQUEST_CODE)
         } ?: run {
-            this.startActivityForResult(intent, PERMISSIONS_REQUEST_CODE)
+            startActivityForResult(intent, PERMISSIONS_REQUEST_CODE)
         }
+    }
+
+    fun shouldShowRequestPermission(@NonNull permission: String): Boolean {
+        return shouldShowRequestPermissionRationale(permission)
     }
 
     companion object {
         private const val PERMISSIONS_REQUEST_CODE = 629
 
-        fun newInstance(permissions: ArrayList<String>): CrPermissionFragment {
+        fun newInstance(
+            permissions: Array<String>,
+            listener: PermissionListener
+        ): CrPermissionFragment {
+            Log.d("ASDF", "newInstance")
+
             val fragment = CrPermissionFragment()
-            fragment.setPermissionList(permissions)
+            fragment.setPermissionArray(permissions)
+            fragment.setPermissionStatusListener(listener)
             return fragment
         }
     }
