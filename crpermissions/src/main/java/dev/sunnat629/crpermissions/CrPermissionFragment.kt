@@ -7,7 +7,6 @@ import android.net.Uri.fromParts
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +16,7 @@ import androidx.fragment.app.FragmentActivity
 import timber.log.Timber
 
 class CrPermissionFragment : Fragment(), PermissionsHandler.Listener {
+
     override fun onPermissionGranted(permission: String) {
         handler?.onPermissionGranted(permission)
         Timber.tag("TAG").d("onPermissionGranted: ${Utils.getPermissionName(permission)}")
@@ -33,7 +33,7 @@ class CrPermissionFragment : Fragment(), PermissionsHandler.Listener {
     }
 
     private lateinit var permissionsHandler: PermissionsHandler
-    private var handler: CrPermissionsHandler? = null
+    private var handler: CrPermissionsResultHandler? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,7 +92,7 @@ class CrPermissionFragment : Fragment(), PermissionsHandler.Listener {
         }
     }
 
-    private fun setCrPermissionsHandler(handler: CrPermissionsHandler?) {
+    private fun setCrPermissionsHandler(handler: CrPermissionsResultHandler?) {
         this.handler = handler
     }
 
@@ -118,7 +118,7 @@ class CrPermissionFragment : Fragment(), PermissionsHandler.Listener {
         private const val PERMISSIONS_REQUEST_CODE = 629
 
         fun newInstance(
-            handler: CrPermissionsHandler?
+            handler: CrPermissionsResultHandler?
         ): CrPermissionFragment {
             val fragment = CrPermissionFragment()
             fragment.setCrPermissionsHandler(handler)

@@ -5,9 +5,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import timber.log.Timber
 
-
-class MainActivity : AppCompatActivity(), CrMandatoryPermissionHandler {
+class MainActivity : AppCompatActivity(), CrPermissionsResultHandler {
 
     private lateinit var crPermissions: CrPermissions
 
@@ -45,11 +45,16 @@ class MainActivity : AppCompatActivity(), CrMandatoryPermissionHandler {
         crPermissions.getPermissionWithAlertDialog("This permission is important to open some features.", Manifest.permission.CAMERA)
     }
 
-    fun mandatoryPermission(view: View){
-        crPermissions.getMandatoryPermission("This is mandatory Permission, Please allow.", Manifest.permission.CAMERA)
+
+    override fun onPermissionGranted(permission: String) {
+        Timber.tag("TAG").d("onPermissionGranted: ${Utils.getPermissionName(permission)}")
     }
 
-    override fun onMandatoryPermissionDenied() {
-        finish()
+    override fun onPermissionDenied(permission: String) {
+        Timber.tag("TAG").e("onPermissionDenied: ${Utils.getPermissionName(permission)}")
+    }
+
+    override fun onPermissionRationaleShouldBeShown(permission: String) {
+        Timber.tag("TAG").i("onPermissionRationaleShouldBeShown: ${Utils.getPermissionName(permission)}")
     }
 }

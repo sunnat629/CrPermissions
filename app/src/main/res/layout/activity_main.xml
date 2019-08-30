@@ -54,24 +54,13 @@
         app:layout_constraintTop_toBottomOf="@+id/single_permission" />
 
     <Button
-        android:onClick="mandatoryPermission"
-        android:id="@+id/mandatory_permission"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/mandatory_permission"
-        app:layout_constraintEnd_toEndOf="@+id/send_msg_permission"
-        app:layout_constraintStart_toStartOf="@+id/send_msg_permission"
-        app:layout_constraintTop_toBottomOf="@+id/send_msg_permission" />
-
-    <Button
         android:onClick="openCamera"
         android:id="@+id/open_camera_permission"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/open_camera_permission"
-        app:layout_constraintEnd_toEndOf="@+id/mandatory_permission"
-        app:layout_constraintStart_toStartOf="@+id/mandatory_permission"
-        app:layout_constraintTop_toBottomOf="@+id/mandatory_permission" />
+        app:layout_constraintEnd_toEndOf="@+id/send_msg_permission"
+        app:layout_constraintStart_toStartOf="@+id/send_msg_permission"
+        app:layout_constraintTop_toBottomOf="@+id/send_msg_permission" />
 </androidx.constraintlayout.widget.ConstraintLayout>

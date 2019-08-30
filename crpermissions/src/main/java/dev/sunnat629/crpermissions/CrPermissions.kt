@@ -12,29 +12,13 @@ open class CrPermissions(
     @NonNull private val context: Context
 ) {
 
-    private var crPermissionsHandler: CrPermissionsHandler? = null
-    private var mandatoryPermissionHandler: CrMandatoryPermissionHandler? = null
+    private var crPermissionsHandler: CrPermissionsResultHandler? = null
 
     constructor(
         @NonNull context: Context,
-        @NonNull handler: CrPermissionsHandler
+        @NonNull handler: CrPermissionsResultHandler
     ) : this(context) {
         this.crPermissionsHandler = handler
-    }
-
-    constructor(
-        @NonNull context: Context,
-        @NonNull mandatoryPermissionHandler: CrMandatoryPermissionHandler
-    ) : this(context) {
-        this.mandatoryPermissionHandler = mandatoryPermissionHandler
-    }
-
-    constructor(
-        @NonNull context: Context,
-        @NonNull handler: CrPermissionsHandler,
-        @NonNull mandatoryPermissionHandler: CrMandatoryPermissionHandler
-    ) : this(context, handler) {
-        this.mandatoryPermissionHandler = mandatoryPermissionHandler
     }
 
     /**
@@ -97,25 +81,12 @@ open class CrPermissions(
      * It will ask Run time permission if the Android OS is Marshmallow (M) or newer version
      * */
     fun getPermissionWithAlertDialog(message: String, singlePermission: String) {
-        AlertDialog.Builder(context).setMessage(message)
-            .setPositiveButton("OK") { _, _ ->
-                getSinglePermission(singlePermission)
-            }
-            .setNegativeButton("Cancel") { dialog, _ ->
-                dialog.cancel()
-            }
-            .setCancelable(false)
-            .show()
-    }
-
-    fun getMandatoryPermission(message: String, singlePermission: String) {
-        if (!isGranted(singlePermission)){
+        if (isGranted(singlePermission)){
             AlertDialog.Builder(context).setMessage(message)
                 .setPositiveButton("OK") { _, _ ->
                     getSinglePermission(singlePermission)
                 }
-                .setNegativeButton("Exit App") { dialog, _ ->
-                    mandatoryPermissionHandler?.onMandatoryPermissionDenied()
+                .setNegativeButton("Cancel") { dialog, _ ->
                     dialog.cancel()
                 }
                 .setCancelable(false)
@@ -166,11 +137,19 @@ open class CrPermissions(
         }
     }
 
-    private fun isRevoked(permission: String): Boolean {
+    /**
+     * It will return the Revoke status of the given permission
+     * @param permission is the given permission from the app
+     * */
+    fun isRevoked(permission: String): Boolean {
         return isGreaterM() && crPermissionFragment?.isRevoked(permission)!!
     }
 
-    private fun isGranted(permission: String): Boolean {
+    /**
+     * It will return the grand status of the given permission
+     * @param permission is the given permission from the app
+     * */
+    fun isGranted(permission: String): Boolean {
         return isGreaterM() && crPermissionFragment?.isGranted(permission)!!
     }
 
