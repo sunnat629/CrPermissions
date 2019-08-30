@@ -34,6 +34,12 @@ override fun onCreate(savedInstanceState: Bundle?) {
 ```
 ## What's New
 
+### v.1.0.0 (Release Date: 30 August 2019)
+- 1st stable version
+
+### v.0.0.2 (Release Date: 30 August 2019)
+- minor bug fixed
+
 ### v.0.0.1 (Release Date: 30 August 2019)
 - **`getAllPermissions()`**: This is the function will read automatically the list of the permissions of the app manifest.
 ```
