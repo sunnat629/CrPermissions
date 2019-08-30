@@ -81,7 +81,7 @@ open class CrPermissions(
      * It will ask Run time permission if the Android OS is Marshmallow (M) or newer version
      * */
     fun getPermissionWithAlertDialog(message: String, singlePermission: String) {
-        if (isGranted(singlePermission)){
+        if (!isGranted(singlePermission)){
             AlertDialog.Builder(context).setMessage(message)
                 .setPositiveButton("OK") { _, _ ->
                     getSinglePermission(singlePermission)
