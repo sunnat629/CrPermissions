@@ -65,7 +65,7 @@ open class CrPermissions(private val context: Context) {
      * It will ask Run time permission if the Android OS is Marshmallow (M) or newer version
      * */
     fun getSinglePermission(@NonNull singlePermission: String) {
-        if (singlePermission.isBlank()) {
+        if (singlePermission.isNotEmpty()) {
             crPermissionFragment?.requestSinglePermission(singlePermission)
         }
     }
