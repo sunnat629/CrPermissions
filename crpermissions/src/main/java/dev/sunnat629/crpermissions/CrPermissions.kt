@@ -9,17 +9,10 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 
 open class CrPermissions(
-    @NonNull private val context: Context
+    @NonNull private val context: Context,
+    @NonNull private val listener: PermissionsResultHandler.Listener
 ) {
 
-    private var crPermissionsHandler: CrPermissionsResultHandler? = null
-
-    constructor(
-        @NonNull context: Context,
-        @NonNull handler: CrPermissionsResultHandler
-    ) : this(context) {
-        this.crPermissionsHandler = handler
-    }
 
     /**
      * It will attached the CrPermissionFragment with the application activity or framework
@@ -28,7 +21,7 @@ open class CrPermissions(
         getCrPermissionsFragment((context as FragmentActivity).supportFragmentManager)
 
     private fun getCrPermissionsFragment(fragmentManager: FragmentManager): CrPermissionFragment? {
-        val permissionFragment = CrPermissionFragment.newInstance(crPermissionsHandler)
+        val permissionFragment = CrPermissionFragment.newInstance(listener)
         fragmentManager
             .beginTransaction()
             .add(permissionFragment, CrPermissions::class.java.simpleName)

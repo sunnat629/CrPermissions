@@ -13,11 +13,11 @@ import android.view.ViewGroup
 import androidx.annotation.NonNull
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import timber.log.Timber
 
-class CrPermissionFragment : Fragment(), PermissionsHandler.Listener {
+class CrPermissionFragment : Fragment(){
 
-    private var handler: CrPermissionsResultHandler? = null
+    private lateinit var permissionsHandler: PermissionsResultHandler
+    private lateinit var listener: PermissionsResultHandler.Listener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +29,7 @@ class CrPermissionFragment : Fragment(), PermissionsHandler.Listener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        permissionsHandler = PermissionsHandler(this)
+        permissionsHandler = PermissionsResultHandler(listener)
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
@@ -55,7 +55,7 @@ class CrPermissionFragment : Fragment(), PermissionsHandler.Listener {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        activity?.let { permissionsHandler.onResult(it, permissions, grantResults) }
+        activity?.let { permissionsHandler?.onResult(it, permissions, grantResults) }
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -76,8 +76,8 @@ class CrPermissionFragment : Fragment(), PermissionsHandler.Listener {
         }
     }
 
-    private fun setCrPermissionsHandler(handler: CrPermissionsResultHandler?) {
-        this.handler = handler
+    private fun setPermissionsResultListener(listener: PermissionsResultHandler.Listener) {
+        this.listener = listener
     }
 
     fun requestPermissionInSetting() {
@@ -98,28 +98,15 @@ class CrPermissionFragment : Fragment(), PermissionsHandler.Listener {
         return shouldShowRequestPermissionRationale(permission)
     }
 
-    override fun onPermissionGranted(permission: String) {
-        handler?.onPermissionGranted(permission)
-    }
-
-    override fun onPermissionDenied(permission: String) {
-        handler?.onPermissionDenied(permission)
-    }
-
-    override fun onPermissionRationaleShouldBeShown(permission: String) {
-        handler?.onPermissionRationaleShouldBeShown(permission)
-    }
-
-    private lateinit var permissionsHandler: PermissionsHandler
 
     companion object {
         private const val PERMISSIONS_REQUEST_CODE = 629
 
         fun newInstance(
-            handler: CrPermissionsResultHandler?
+            listener: PermissionsResultHandler.Listener
         ): CrPermissionFragment {
             val fragment = CrPermissionFragment()
-            fragment.setCrPermissionsHandler(handler)
+            fragment.setPermissionsResultListener(listener)
             return fragment
         }
     }
