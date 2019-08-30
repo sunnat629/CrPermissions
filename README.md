@@ -67,7 +67,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 **NOTE:** In this version, if you check the `Don't ask again`, then you have to go manually to the settings and give the permission.
 
-### Future Plan
+## Future Plan
 - Implement Handler/Listener
 - Mandatory Permission
 - Ask permission with additional message
