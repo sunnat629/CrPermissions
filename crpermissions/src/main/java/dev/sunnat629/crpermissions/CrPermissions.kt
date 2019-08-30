@@ -3,6 +3,7 @@ package dev.sunnat629.crpermissions
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
@@ -40,7 +41,9 @@ open class CrPermissions(private val context: Context) {
             PackageManager.GET_PERMISSIONS
         ).requestedPermissions
 
-        crPermissionFragment?.requestAllPermissions(permissionsArray)
+        if (permissionsArray.isNotEmpty()){
+            crPermissionFragment?.requestAllPermissions(permissionsArray)
+        }
     }
 
     /**

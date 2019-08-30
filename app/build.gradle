@@ -32,7 +32,7 @@ dependencies {
     implementation project(path: ':crpermissions')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "androidx.appcompat:appcompat:${versions.appcompat}"
+    implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation "androidx.core:core-ktx:${versions.ktx}"
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 
