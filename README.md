@@ -87,7 +87,8 @@ class MainActivity : AppCompatActivity(), PermissionsResultHandler.Listener {
 
 ```
 
-#### **`getPermissionWithAlertDialog(message: String, singlePermission: String)`**: This is the function will ask one given permission with a message if the app needs this particular permission which is mandatory. `message` parameter is the important message of the app. It will be showed before asking the permission. `singlePermission` parameter is a permission.
+#### **`getPermissionWithAlertDialog(message: String, singlePermission: String)`**
+This is the function will ask one given permission with a message if the app needs this particular permission which is mandatory. `message` parameter is the important message of the app. It will be showed before asking the permission. `singlePermission` parameter is a permission.
 ```
 crPermissions.getPermissionWithAlertDialog(
         "This permission is important to open some features.",
@@ -95,7 +96,8 @@ crPermissions.getPermissionWithAlertDialog(
  )
 ```
 
-#### **`sendSettingsToGetPermission(message: String)`**: This is the function will ask one given permission with a message if the app needs this particular permission which is mandatory. `message` parameter is the important message of the app. It will be showed before asking the permission.
+#### **`sendSettingsToGetPermission(message: String)`**
+This is the function will ask one given permission with a message if the app needs this particular permission which is mandatory. `message` parameter is the important message of the app. It will be showed before asking the permission.
 ```
 sendSettingsToGetPermission(
             "You have permanently deny the permission of ${Utils.getPermissionName(
@@ -105,7 +107,8 @@ sendSettingsToGetPermission(
 ```
 
 
-#### **`hasPermission(permission: String)`**: Return the permission status as Boolean before use the permitted features like Camera, Call Log, read/write storage etc. If the permission is Granted already, it will return `true`. If the user Denied without check the "Don't ask again", it will again ask the permission and return `false`. If the user Denied and check the "Don't ask again", it will again ask to go to Settings for give the permission manually and return `false`. `permission` parameter is the name of the permission user wants to use.
+#### **`hasPermission(permission: String)`**
+Return the permission status as Boolean before use the permitted features like Camera, Call Log, read/write storage etc. If the permission is Granted already, it will return `true`. If the user Denied without check the "Don't ask again", it will again ask the permission and return `false`. If the user Denied and check the "Don't ask again", it will again ask to go to Settings for give the permission manually and return `false`. `permission` parameter is the name of the permission user wants to use.
 ```
 if (crPermissions.hasPermission(Manifest.permission.CAMERA)){
             val intent = Intent("android.media.action.IMAGE_CAPTURE")
@@ -121,13 +124,15 @@ if (crPermissions.hasPermission(Manifest.permission.CAMERA)){
 - minor bug fixed
 
 ### v.0.0.1 (Release Date: 30 August 2019)
-#### **`getAllPermissions()`**: This is the function will read automatically the list of the permissions of the app manifest.
+#### **`getAllPermissions()`**
+This is the function will read automatically the list of the permissions of the app manifest.
 ```
     fun getAllPermissions(view: View) {
         crPermissions.getAllPermissions()
     }
 ```
-#### **`getPermissionArray(permissionArray: Array<String>)`**: This is the function will read a list of permissions which will be given by the developer. `permissionArray` parameter is the array of permissions.
+#### **`getPermissionArray(permissionArray: Array<String>)`**
+This is the function will read a list of permissions which will be given by the developer. `permissionArray` parameter is the array of permissions.
 ```
     fun getPermissionArray(view: View) {
         crPermissions.getPermissionArray(
@@ -138,7 +143,8 @@ if (crPermissions.hasPermission(Manifest.permission.CAMERA)){
         )
     }
 ```
-#### **`getSinglePermission(singlePermission: String)`**: This is the function which reads only one permission which will be given by the developer. `singlePermission` parameter is a permission.
+#### **`getSinglePermission(singlePermission: String)`**
+This is the function which reads only one permission which will be given by the developer. `singlePermission` parameter is a permission.
 ```
     fun getSinglePermission(view: View) {
         crPermissions.getSinglePermission(Manifest.permission.CAMERA)
