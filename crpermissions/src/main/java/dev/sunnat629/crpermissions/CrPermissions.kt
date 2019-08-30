@@ -10,11 +10,15 @@ import androidx.fragment.app.FragmentManager
 
 open class CrPermissions(private val context: Context) {
 
+
+    /**
+     * It will attached the CrPermissionFragment with the application activity or framework
+     * */
     private val crPermissionFragment =
         getCrPermissionsFragment((context as FragmentActivity).supportFragmentManager)
 
     private fun getCrPermissionsFragment(fragmentManager: FragmentManager): CrPermissionFragment? {
-        var crPermissionsFragment = findCrPermissionsFragment(fragmentManager)
+        var crPermissionsFragment = fragmentManager.findFragmentByTag(CrPermissions::class.java.simpleName) as CrPermissionFragment?
         val isNewInstance = crPermissionsFragment == null
         if (isNewInstance) {
             crPermissionsFragment = CrPermissionFragment()
@@ -26,10 +30,10 @@ open class CrPermissions(private val context: Context) {
         return crPermissionsFragment
     }
 
-    private fun findCrPermissionsFragment(fragmentManager: FragmentManager): CrPermissionFragment? {
-        return fragmentManager.findFragmentByTag(CrPermissions::class.java.simpleName) as CrPermissionFragment?
-    }
-
+    /**
+     * This is the function will read automatically the list of the permissions of the app manifest.
+     * It will ask Run time permission if the Android OS is Marshmallow (M) or newer version
+     * */
     fun getAllPermissions() {
         val permissionsArray = context.packageManager.getPackageInfo(
             context.packageName,
@@ -39,26 +43,21 @@ open class CrPermissions(private val context: Context) {
         crPermissionFragment?.requestAllPermissions(permissionsArray)
     }
 
-    fun getPermission(singlePermission: String) {
+    /**
+     * This is the function will read a list of permissions which will be given by the developer.
+     * @param permissionArray is the array of permissions.
+     * It will ask Run time permission if the Android OS is Marshmallow (M) or newer version
+     * */
+    fun getPermissionArray(permissionArray: Array<String>) {
+        crPermissionFragment?.requestPermissionArray(permissionArray)
+    }
+
+    /**
+     * This is the function which reads only one permission which will be given by the developer.
+     * @param singlePermission is a permission.
+     * It will ask Run time permission if the Android OS is Marshmallow (M) or newer version
+     * */
+    fun getSinglePermission(singlePermission: String) {
         crPermissionFragment?.requestSinglePermission(singlePermission)
-    }
-    fun getPermissionAA(singlePermission: String) {
-        AlertDialog.Builder(context).setMessage("Go Settings -> Permission. " + "Make SMS on and Storage on")
-            .setPositiveButton("Settings") { _, _ ->
-                crPermissionFragment?.requestPermissionInSetting()
-            }
-            .setNegativeButton("Cancel") { dialog, _ ->
-//                smsAndStoragePermissionHandler.cancel()
-                dialog.cancel()
-            }
-            .show()
-    }
-
-    private fun isRevoked(permission: String): Boolean {
-        return isGreaterM() && crPermissionFragment?.isRevoked(permission)!!
-    }
-
-    private fun isGreaterM(): Boolean {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
     }
 }

@@ -35,6 +35,8 @@ dependencies {
     testImplementation "junit:junit:${versions.junit}"
     testImplementation "androidx.test.ext:junit:${versions.testExtJunit}"
 
+    implementation "com.jakewharton.timber:timber:$versions.timber"
+
     androidTestImplementation "androidx.test.ext:junit:${versions.testExtJunit}"
     androidTestImplementation "androidx.test.espresso:espresso-core:${versions.espresso}"
 }

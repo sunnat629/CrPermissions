@@ -4,15 +4,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="dev.sunnat629.crpermissions.MainActivity">
+    tools:context=".MainActivity">
 
-    <TextView
+
+    <Button
+        android:onClick="getAllPermissions"
+        android:id="@+id/all_permission"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:text="@string/all_permission"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:onClick="getPermissionArray"
+        android:id="@+id/permission_array"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/permission_array"
+        app:layout_constraintEnd_toEndOf="@+id/all_permission"
+        app:layout_constraintStart_toStartOf="@+id/all_permission"
+        app:layout_constraintTop_toBottomOf="@+id/all_permission" />
+
+    <Button
+        android:onClick="getSinglePermission"
+        android:id="@+id/single_permission"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/single_permission"
+        app:layout_constraintEnd_toEndOf="@+id/permission_array"
+        app:layout_constraintStart_toStartOf="@+id/permission_array"
+        app:layout_constraintTop_toBottomOf="@+id/permission_array" />
 </androidx.constraintlayout.widget.ConstraintLayout>
