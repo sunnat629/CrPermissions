@@ -3,8 +3,6 @@ package dev.sunnat629.crpermissions
 import android.annotation.TargetApi
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.pm.PackageManager.PERMISSION_DENIED
-import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.Uri.fromParts
 import android.os.Build
 import android.os.Bundle
@@ -16,11 +14,26 @@ import android.view.ViewGroup
 import androidx.annotation.NonNull
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import timber.log.Timber
 
-class CrPermissionFragment : Fragment() {
+class CrPermissionFragment : Fragment(), PermissionsHandler.Listener {
+    override fun onPermissionGranted(permission: String) {
+        handler?.onPermissionGranted(permission)
+        Timber.tag("TAG").d("onPermissionGranted: ${Utils.getPermissionName(permission)}")
+    }
 
-    private lateinit var permissionList: Array<String>
-    private lateinit var listener: PermissionListener
+    override fun onPermissionDenied(permission: String) {
+        handler?.onPermissionDenied(permission)
+        Timber.tag("TAG").e("onPermissionDenied: ${Utils.getPermissionName(permission)}")
+    }
+
+    override fun onPermissionRationaleShouldBeShown(permission: String) {
+        handler?.onPermissionRationaleShouldBeShown(permission)
+        Timber.tag("TAG").i("onPermissionRationaleShouldBeShown: ${Utils.getPermissionName(permission)}")
+    }
+
+    private lateinit var permissionsHandler: PermissionsHandler
+    private var handler: CrPermissionsHandler? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +45,7 @@ class CrPermissionFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        permissionsHandler = PermissionsHandler(this)
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
@@ -41,14 +55,12 @@ class CrPermissionFragment : Fragment() {
     }
 
     @TargetApi(Build.VERSION_CODES.M)
-    fun requestSinglePermissionArray(permissionArray: Array<String>) {
-        setPermissionArray(permissionArray)
+    fun requestPermissionArray(permissionArray: Array<String>) {
         requestPermissions(permissionArray, PERMISSIONS_REQUEST_CODE)
     }
 
     @TargetApi(Build.VERSION_CODES.M)
     fun requestSinglePermission(singlePermission: String) {
-        setPermissionArray(arrayOf(singlePermission))
         requestPermissions(arrayOf(singlePermission), PERMISSIONS_REQUEST_CODE)
     }
 
@@ -59,18 +71,7 @@ class CrPermissionFragment : Fragment() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        permissions.mapIndexed { index, permission ->
-            when (grantResults[index]) {
-                    PERMISSION_GRANTED -> listener.onPermissionGranted(permission)
-                    PERMISSION_DENIED -> {
-                        if(shouldShowRequestPermissionRationale(permission)){
-                            listener.onPermissionRationaleShouldBeShown(permission)
-                        } else{
-                            listener.onPermissionDenied(permission)
-                        }
-                    }
-                }
-        }
+        activity?.let { permissionsHandler.onResult(it, permissions, grantResults) }
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -91,12 +92,8 @@ class CrPermissionFragment : Fragment() {
         }
     }
 
-    private fun setPermissionArray(permissions: Array<String>) {
-        this.permissionList = permissions
-    }
-
-    private fun setPermissionStatusListener(listener: PermissionListener) {
-        this.listener = listener
+    private fun setCrPermissionsHandler(handler: CrPermissionsHandler?) {
+        this.handler = handler
     }
 
     fun requestPermissionInSetting() {
@@ -121,14 +118,10 @@ class CrPermissionFragment : Fragment() {
         private const val PERMISSIONS_REQUEST_CODE = 629
 
         fun newInstance(
-            permissions: Array<String>,
-            listener: PermissionListener
+            handler: CrPermissionsHandler?
         ): CrPermissionFragment {
-            Log.d("ASDF", "newInstance")
-
             val fragment = CrPermissionFragment()
-            fragment.setPermissionArray(permissions)
-            fragment.setPermissionStatusListener(listener)
+            fragment.setCrPermissionsHandler(handler)
             return fragment
         }
     }

@@ -3,52 +3,53 @@ package dev.sunnat629.crpermissions
 import android.Manifest
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_main.*
 
 
-class MainActivity : AppCompatActivity(), PermissionListener {
-    override fun onPermissionRationaleShouldBeShown(permission: String) {
-        Log.d("ASDFG", "$permission: onPermissionRationaleShouldBeShown")
-
-    }
-
-    override fun onPermissionGranted(permission: String) {
-        Log.d("ASDFG", "$permission: onPermissionGranted")
-
-    }
-
-    override fun onPermissionDenied(permission: String) {
-        Log.d("ASDFG", "$permission: onPermissionDenied")
-    }
+class MainActivity : AppCompatActivity(), CrMandatoryPermissionHandler {
 
     private lateinit var crPermissions: CrPermissions
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("ASDF", "onCreate")
         setContentView(R.layout.activity_main)
         crPermissions = CrPermissions(this, this)
-
-        ask_permission.setOnClickListener{
-            if (crPermissions.hasPermission(Manifest.permission.CAMERA)){
-                val intent = Intent("android.media.action.IMAGE_CAPTURE")
-                startActivity(intent)
-            }
-//            crPermissions.getAllPermissions()
-
-//            crPermissions.getPermissionWithAlertDialog("Need Camera Permission", Manifest.permission.CAMERA)
-        }
-//        crPermissions.getAllPermissions()
-//        crPermissions.getPermission(Manifest.permission.CAMERA)
-
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        Log.d("ASDF", "onRestoreInstanceState")
+    fun getAllPermissions(view: View) {
+        crPermissions.getAllPermissions()
+    }
 
-        crPermissions = CrPermissions(this, this)
+    fun getPermissionArray(view: View) {
+        crPermissions.getPermissionArray(
+            arrayOf(
+                Manifest.permission.CAMERA,
+                Manifest.permission.CALL_PHONE
+            )
+        )
+    }
+
+    fun getSinglePermission(view: View) {
+        crPermissions.getSinglePermission(Manifest.permission.CAMERA)
+    }
+
+    fun openCamera(view: View){
+        if (crPermissions.hasPermission(Manifest.permission.CAMERA)){
+            val intent = Intent("android.media.action.IMAGE_CAPTURE")
+            startActivity(intent)
+        }
+    }
+
+    fun permissionWithAlertDialog(view: View){
+        crPermissions.getPermissionWithAlertDialog("This permission is important to open some features.", Manifest.permission.CAMERA)
+    }
+
+    fun mandatoryPermission(view: View){
+        crPermissions.getMandatoryPermission("This is mandatory Permission, Please allow.", Manifest.permission.CAMERA)
+    }
+
+    override fun onMandatoryPermissionDenied() {
+        finish()
     }
 }

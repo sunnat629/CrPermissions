@@ -4,16 +4,74 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="dev.sunnat629.crpermissions.MainActivity">
+    tools:context=".MainActivity">
+
 
     <Button
-        android:id="@+id/ask_permission"
+        android:id="@+id/all_permission"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:onClick="getAllPermissions"
+        android:text="@string/all_permission"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:onClick="getPermissionArray"
+        android:id="@+id/permission_array"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/permission_array"
+        app:layout_constraintEnd_toEndOf="@+id/all_permission"
+        app:layout_constraintStart_toStartOf="@+id/all_permission"
+        app:layout_constraintTop_toBottomOf="@+id/all_permission" />
+
+    <Button
+        android:onClick="getSinglePermission"
+        android:id="@+id/single_permission"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/single_permission"
+        app:layout_constraintEnd_toEndOf="@+id/permission_array"
+        app:layout_constraintStart_toStartOf="@+id/permission_array"
+        app:layout_constraintTop_toBottomOf="@+id/permission_array" />
+
+    <Button
+        android:onClick="permissionWithAlertDialog"
+        android:id="@+id/send_msg_permission"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/send_msg_permission"
+        app:layout_constraintEnd_toEndOf="@+id/single_permission"
+        app:layout_constraintStart_toStartOf="@+id/single_permission"
+        app:layout_constraintTop_toBottomOf="@+id/single_permission" />
+
+    <Button
+        android:onClick="mandatoryPermission"
+        android:id="@+id/mandatory_permission"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/mandatory_permission"
+        app:layout_constraintEnd_toEndOf="@+id/send_msg_permission"
+        app:layout_constraintStart_toStartOf="@+id/send_msg_permission"
+        app:layout_constraintTop_toBottomOf="@+id/send_msg_permission" />
+
+    <Button
+        android:onClick="openCamera"
+        android:id="@+id/open_camera_permission"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/open_camera_permission"
+        app:layout_constraintEnd_toEndOf="@+id/mandatory_permission"
+        app:layout_constraintStart_toStartOf="@+id/mandatory_permission"
+        app:layout_constraintTop_toBottomOf="@+id/mandatory_permission" />
 </androidx.constraintlayout.widget.ConstraintLayout>

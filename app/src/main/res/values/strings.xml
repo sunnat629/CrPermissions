@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">CrPermissions</string>
+    <string name="permission_array">Permission Array</string>
+    <string name="single_permission">Single Permission</string>
+    <string name="all_permission">All Permissions from Manifest</string>
+    <string name="open_camera_permission">open Camera Permission</string>
+    <string name="mandatory_permission">Mandatory Permission</string>
+    <string name="send_msg_permission">Send Msg Permission</string>
 </resources>
