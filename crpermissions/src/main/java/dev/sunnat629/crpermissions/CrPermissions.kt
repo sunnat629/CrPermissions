@@ -3,14 +3,15 @@ package dev.sunnat629.crpermissions
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
-import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 
-
-open class CrPermissions(private val context: Context) {
+open class CrPermissions(
+    @NonNull private val context: Context,
+    @NonNull private val listener: PermissionsResultHandler.Listener
+) {
 
 
     /**
@@ -20,17 +21,12 @@ open class CrPermissions(private val context: Context) {
         getCrPermissionsFragment((context as FragmentActivity).supportFragmentManager)
 
     private fun getCrPermissionsFragment(fragmentManager: FragmentManager): CrPermissionFragment? {
-        var crPermissionsFragment =
-            fragmentManager.findFragmentByTag(CrPermissions::class.java.simpleName) as CrPermissionFragment?
-        val isNewInstance = crPermissionsFragment == null
-        if (isNewInstance) {
-            crPermissionsFragment = CrPermissionFragment()
-            fragmentManager
-                .beginTransaction()
-                .add(crPermissionsFragment, CrPermissions::class.java.simpleName)
-                .commitNow()
-        }
-        return crPermissionsFragment
+        val permissionFragment = CrPermissionFragment.newInstance(listener)
+        fragmentManager
+            .beginTransaction()
+            .add(permissionFragment, CrPermissions::class.java.simpleName)
+            .commitNow()
+        return permissionFragment
     }
 
     /**
@@ -65,8 +61,96 @@ open class CrPermissions(private val context: Context) {
      * It will ask Run time permission if the Android OS is Marshmallow (M) or newer version
      * */
     fun getSinglePermission(@NonNull singlePermission: String) {
-        if (singlePermission.isNotEmpty()) {
+        if (singlePermission.isNotEmpty()){
             crPermissionFragment?.requestSinglePermission(singlePermission)
         }
+    }
+
+    /**
+     * This is the function will ask one given permission with a message if the app needs this particular permission
+     * which is mandatory.
+     * @param message is the important message of the app. It will be showed before asking the permission
+     * @param singlePermission is a permission.
+     * It will ask Run time permission if the Android OS is Marshmallow (M) or newer version
+     * */
+    fun getPermissionWithAlertDialog(message: String, singlePermission: String) {
+        if (!isGranted(singlePermission)){
+            AlertDialog.Builder(context).setMessage(message)
+                .setPositiveButton("OK") { _, _ ->
+                    getSinglePermission(singlePermission)
+                }
+                .setNegativeButton("Cancel") { dialog, _ ->
+                    dialog.cancel()
+                }
+                .setCancelable(false)
+                .show()
+        }
+    }
+
+    /**
+     * This is the function will ask one given permission with a message if the app needs this particular permission
+     * which is mandatory.
+     * @param message is the important message of the app. It will be showed before asking the permission
+     * It will ask Run time permission if the Android OS is Marshmallow (M) or newer version
+     * */
+    private fun sendSettingsToGetPermission(message: String) {
+        AlertDialog.Builder(context).setMessage(message)
+            .setPositiveButton("Settings") { _, _ ->
+                crPermissionFragment?.requestPermissionInSetting()
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.cancel()
+            }
+            .setCancelable(false)
+            .show()
+    }
+
+    /**
+     * Return the permission status as Boolean before use the permitted features like Camera, Call Log, read/write storage etc.
+     * If the permission is Granted already, it will return true.
+     * If the user Denied without check the "Don't ask again", it will again ask the permission and return false
+     * If the user Denied and check the "Don't ask again", it will again ask to go to Settings for give the permission manually and return false
+     * @param permission is the name of the permission user wants to use.
+     * */
+    fun hasPermission(permission: String): Boolean {
+        return when {
+            shouldShowRequestPermission(permission) -> {
+                getSinglePermission(permission)
+                false
+            }
+            isGranted(permission) -> true
+            else -> {
+                sendSettingsToGetPermission(
+                    "You have permanently deny the permission of ${Utils.getPermissionName(
+                        permission
+                    )}.\nPlease go to Settings for the giving the permission"
+                )
+                false
+            }
+        }
+    }
+
+    /**
+     * It will return the Revoke status of the given permission
+     * @param permission is the given permission from the app
+     * */
+    fun isRevoked(permission: String): Boolean {
+        return isGreaterM() && crPermissionFragment?.isRevoked(permission)!!
+    }
+
+    /**
+     * It will return the grand status of the given permission
+     * @param permission is the given permission from the app
+     * */
+    fun isGranted(permission: String): Boolean {
+        return isGreaterM() && crPermissionFragment?.isGranted(permission)!!
+    }
+
+    private fun shouldShowRequestPermission(permission: String): Boolean {
+        return crPermissionFragment?.shouldShowRequestPermission(permission) ?: false
+    }
+
+    private fun isGreaterM(): Boolean {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
     }
 }
