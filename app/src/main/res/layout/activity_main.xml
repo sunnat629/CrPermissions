@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context="dev.sunnat629.crpermissions.MainActivity">
 
-
     <Button
         android:id="@+id/all_permission"
         android:layout_width="wrap_content"

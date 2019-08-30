@@ -160,5 +160,4 @@ open class CrPermissions(
     private fun isGreaterM(): Boolean {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
     }
-
 }

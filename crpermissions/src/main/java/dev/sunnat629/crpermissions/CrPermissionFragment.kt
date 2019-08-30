@@ -17,22 +17,6 @@ import timber.log.Timber
 
 class CrPermissionFragment : Fragment(), PermissionsHandler.Listener {
 
-    override fun onPermissionGranted(permission: String) {
-        handler?.onPermissionGranted(permission)
-        Timber.tag("TAG").d("onPermissionGranted: ${Utils.getPermissionName(permission)}")
-    }
-
-    override fun onPermissionDenied(permission: String) {
-        handler?.onPermissionDenied(permission)
-        Timber.tag("TAG").e("onPermissionDenied: ${Utils.getPermissionName(permission)}")
-    }
-
-    override fun onPermissionRationaleShouldBeShown(permission: String) {
-        handler?.onPermissionRationaleShouldBeShown(permission)
-        Timber.tag("TAG").i("onPermissionRationaleShouldBeShown: ${Utils.getPermissionName(permission)}")
-    }
-
-    private lateinit var permissionsHandler: PermissionsHandler
     private var handler: CrPermissionsResultHandler? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -113,6 +97,20 @@ class CrPermissionFragment : Fragment(), PermissionsHandler.Listener {
     fun shouldShowRequestPermission(@NonNull permission: String): Boolean {
         return shouldShowRequestPermissionRationale(permission)
     }
+
+    override fun onPermissionGranted(permission: String) {
+        handler?.onPermissionGranted(permission)
+    }
+
+    override fun onPermissionDenied(permission: String) {
+        handler?.onPermissionDenied(permission)
+    }
+
+    override fun onPermissionRationaleShouldBeShown(permission: String) {
+        handler?.onPermissionRationaleShouldBeShown(permission)
+    }
+
+    private lateinit var permissionsHandler: PermissionsHandler
 
     companion object {
         private const val PERMISSIONS_REQUEST_CODE = 629

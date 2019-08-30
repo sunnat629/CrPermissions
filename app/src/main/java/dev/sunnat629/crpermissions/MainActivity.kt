@@ -15,6 +15,7 @@ class MainActivity : AppCompatActivity(), CrPermissionsResultHandler {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         crPermissions = CrPermissions(this, this)
+        Timber.tag("TAG").d("onCreate")
     }
 
     fun getAllPermissions(view: View) {
@@ -44,7 +45,6 @@ class MainActivity : AppCompatActivity(), CrPermissionsResultHandler {
     fun permissionWithAlertDialog(view: View){
         crPermissions.getPermissionWithAlertDialog("This permission is important to open some features.", Manifest.permission.CAMERA)
     }
-
 
     override fun onPermissionGranted(permission: String) {
         Timber.tag("TAG").d("onPermissionGranted: ${Utils.getPermissionName(permission)}")
