@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.widget.Toast
+import androidx.annotation.NonNull
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
@@ -19,7 +20,8 @@ open class CrPermissions(private val context: Context) {
         getCrPermissionsFragment((context as FragmentActivity).supportFragmentManager)
 
     private fun getCrPermissionsFragment(fragmentManager: FragmentManager): CrPermissionFragment? {
-        var crPermissionsFragment = fragmentManager.findFragmentByTag(CrPermissions::class.java.simpleName) as CrPermissionFragment?
+        var crPermissionsFragment =
+            fragmentManager.findFragmentByTag(CrPermissions::class.java.simpleName) as CrPermissionFragment?
         val isNewInstance = crPermissionsFragment == null
         if (isNewInstance) {
             crPermissionsFragment = CrPermissionFragment()
@@ -36,12 +38,12 @@ open class CrPermissions(private val context: Context) {
      * It will ask Run time permission if the Android OS is Marshmallow (M) or newer version
      * */
     fun getAllPermissions() {
-        val permissionsArray = context.packageManager.getPackageInfo(
+        val permissionsArray: Array<String>? = context.packageManager.getPackageInfo(
             context.packageName,
             PackageManager.GET_PERMISSIONS
         ).requestedPermissions
 
-        if (permissionsArray.isNotEmpty()){
+        if (permissionsArray != null && permissionsArray.isNotEmpty()) {
             crPermissionFragment?.requestAllPermissions(permissionsArray)
         }
     }
@@ -51,8 +53,10 @@ open class CrPermissions(private val context: Context) {
      * @param permissionArray is the array of permissions.
      * It will ask Run time permission if the Android OS is Marshmallow (M) or newer version
      * */
-    fun getPermissionArray(permissionArray: Array<String>) {
-        crPermissionFragment?.requestPermissionArray(permissionArray)
+    fun getPermissionArray(@NonNull permissionArray: Array<String>) {
+        if (permissionArray.isNotEmpty()) {
+            crPermissionFragment?.requestPermissionArray(permissionArray)
+        }
     }
 
     /**
@@ -60,7 +64,9 @@ open class CrPermissions(private val context: Context) {
      * @param singlePermission is a permission.
      * It will ask Run time permission if the Android OS is Marshmallow (M) or newer version
      * */
-    fun getSinglePermission(singlePermission: String) {
-        crPermissionFragment?.requestSinglePermission(singlePermission)
+    fun getSinglePermission(@NonNull singlePermission: String) {
+        if (singlePermission.isBlank()) {
+            crPermissionFragment?.requestSinglePermission(singlePermission)
+        }
     }
 }

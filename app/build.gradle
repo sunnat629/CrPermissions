@@ -9,14 +9,14 @@ apply plugin: "kotlin-kapt"
 apply from: rootProject.file("versions.gradle")
 
 android {
-    compileSdkVersion versions.compileSdk
+    compileSdkVersion 29
 
     defaultConfig {
         applicationId "dev.sunnat629.crpermissions"
-        minSdkVersion versions.minSdk
-        targetSdkVersion versions.targetSdk
-        versionCode versions.versionCode
-        versionName versions.versionName
+        minSdkVersion 21
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
