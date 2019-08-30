@@ -93,7 +93,7 @@ open class CrPermissions(
      * @param message is the important message of the app. It will be showed before asking the permission
      * It will ask Run time permission if the Android OS is Marshmallow (M) or newer version
      * */
-    private fun sendSettingsToGetPermission(message: String) {
+    fun sendSettingsToGetPermission(message: String) {
         AlertDialog.Builder(context).setMessage(message)
             .setPositiveButton("Settings") { _, _ ->
                 crPermissionFragment?.requestPermissionInSetting()

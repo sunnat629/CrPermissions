@@ -55,7 +55,7 @@ class CrPermissionFragment : Fragment(){
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        activity?.let { permissionsHandler?.onResult(it, permissions, grantResults) }
+        activity?.let { permissionsHandler.onResult(it, permissions, grantResults) }
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -97,7 +97,6 @@ class CrPermissionFragment : Fragment(){
     fun shouldShowRequestPermission(@NonNull permission: String): Boolean {
         return shouldShowRequestPermissionRationale(permission)
     }
-
 
     companion object {
         private const val PERMISSIONS_REQUEST_CODE = 629
