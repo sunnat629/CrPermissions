@@ -16,7 +16,7 @@ allprojects {
 ```
 dependencies {
     ...
-    implementation 'com.github.sunnat629:CrPermissions:0.0.2'
+    implementation 'com.github.sunnat629:CrPermissions:1.0.0'
 }
 ```
 
