@@ -10,7 +10,7 @@ import androidx.fragment.app.FragmentManager
 
 open class CrPermissions(
     @NonNull private val context: Context,
-    @NonNull private val listener: PermissionsResultHandler.Listener
+    @NonNull private val listener: CrPermissionsResultHandler.Listener
 ) {
 
 

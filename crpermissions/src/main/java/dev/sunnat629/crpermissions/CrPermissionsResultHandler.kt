@@ -4,7 +4,7 @@ import android.app.Activity
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.content.PermissionChecker
 
-class PermissionsResultHandler(
+class CrPermissionsResultHandler(
     private val listener: Listener
 ) {
 

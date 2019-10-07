@@ -32,11 +32,23 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.appcompat:appcompat:${versions.appcompat}"
     implementation "androidx.core:core-ktx:${versions.ktx}"
+    implementation "androidx.multidex:multidex:${versions.multidex}"
+
+    // lifecycle
+    implementation "androidx.lifecycle:lifecycle-extensions:${versions.lifecycle}"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${versions.lifecycle}"
+    implementation "androidx.lifecycle:lifecycle-livedata-core:${versions.lifecycle}"
+
+    // coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions.coroutines}"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:${versions.coroutines}"
+
+    // logger
+    implementation "com.jakewharton.timber:timber:${versions.timber}"
+
+    // testing
     testImplementation "junit:junit:${versions.junit}"
-    testImplementation "androidx.test.ext:junit:${versions.testExtJunit}"
-
-    implementation "com.jakewharton.timber:timber:$versions.timber"
-
-    androidTestImplementation "androidx.test.ext:junit:${versions.testExtJunit}"
+    androidTestImplementation "androidx.test:runner:${versions.testCore}"
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:${versions.nhaarman_mockito}"
     androidTestImplementation "androidx.test.espresso:espresso-core:${versions.espresso}"
 }

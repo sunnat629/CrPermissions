@@ -7,7 +7,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import timber.log.Timber
 
-class MainActivity : AppCompatActivity(), PermissionsResultHandler.Listener {
+class MainActivity : AppCompatActivity(), CrPermissionsResultHandler.Listener {
 
     private lateinit var crPermissions: CrPermissions
 

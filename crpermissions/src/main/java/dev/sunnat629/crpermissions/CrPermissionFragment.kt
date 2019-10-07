@@ -13,15 +13,18 @@ import android.view.ViewGroup
 import androidx.annotation.NonNull
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProviders
 
 class CrPermissionFragment : Fragment(){
 
-    private lateinit var permissionsHandler: PermissionsResultHandler
-    private lateinit var listener: PermissionsResultHandler.Listener
+    private lateinit var permissionsHandler: CrPermissionsResultHandler
+    private lateinit var listener: CrPermissionsResultHandler.Listener
+    private lateinit var viewModel: CRPViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        retainInstance = true;
+        retainInstance = true
+        viewModel = ViewModelProviders.of(this).get(CRPViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -29,7 +32,7 @@ class CrPermissionFragment : Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        permissionsHandler = PermissionsResultHandler(listener)
+        permissionsHandler = CrPermissionsResultHandler(listener)
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
@@ -76,7 +79,7 @@ class CrPermissionFragment : Fragment(){
         }
     }
 
-    private fun setPermissionsResultListener(listener: PermissionsResultHandler.Listener) {
+    private fun setPermissionsResultListener(listener: CrPermissionsResultHandler.Listener) {
         this.listener = listener
     }
 
@@ -102,7 +105,7 @@ class CrPermissionFragment : Fragment(){
         private const val PERMISSIONS_REQUEST_CODE = 629
 
         fun newInstance(
-            listener: PermissionsResultHandler.Listener
+            listener: CrPermissionsResultHandler.Listener
         ): CrPermissionFragment {
             val fragment = CrPermissionFragment()
             fragment.setPermissionsResultListener(listener)
